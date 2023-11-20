@@ -39,6 +39,7 @@ router.route("/:id")
 
 
     // edit route
-router.get("/:id/edit",isloggedIn,isowner, wrapAsync(listingscontrol.editForm))
+router.get("/:id/edit",isloggedIn,isowner, wrapAsync(listingscontrol.editForm));
+
 
     module.exports= router

@@ -4,7 +4,7 @@ if(process.env.NODE_ENV != "production"){
 
 // console.log(process.env.API)
 // console.log(process.env.KEY)
-
+const Listing = require("./models/listing")
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -21,7 +21,8 @@ const passport = require("passport")
 const localStrategy = require("passport-local");
 const user = require("./models/user.js");
 
-
+const wrapAsync = require("./utils/wrapAsync.js");
+const  {validatelisting}  = require("./middleware.js")
 // const { listingSchema , reviewSchema} = require("./schema.js");
 // const review = require("./models/Review.js");
 
@@ -110,6 +111,20 @@ app.use("/listings/:id/reviews",reviews)
 
 app.use("/",userRoutes)
 
+// for searcing listings in our website
+app.get("/search",wrapAsync( async(req,res)=>{
+    let searchFild = req.query.search;
+   let allListings = await Listing.find({location:{ $regex:searchFild,$options: 'i'}});
+  
+    if(allListings.length === 0){
+        req.flash("error","listing you are requested dose not exite!")
+        res.redirect("/listings")
+} else{
+    res.render("./listings/index.ejs",{allListings})
+}
+
+}))
+
 
 app.all("*", (req, res, next) => {
     next(new expressError(404, "page not found !"))
@@ -123,9 +138,15 @@ app.use((err, req, res, next) => {
     // res.send("something went wrong bro")
 })
 
+
+
 app.listen(8080, () => {
     console.log("server is listing to port 8080")
 })
+
+
+
+
 
 
 

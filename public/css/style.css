@@ -155,3 +155,17 @@ border-radius: 25px !important;
 padding: 0.5rem 3rem 0.5rem 3rem !important;
 font-size: 1rem !important;
     }
+
+    @media screen and (max-width:700px) {
+        body{
+            padding: 0px !important;
+            margin: 0px !important;
+        }
+        .listing-card{
+    
+            width: 100vw !important;
+        }
+        .show-img{
+            width: 100vw!important;
+        }
+    }
